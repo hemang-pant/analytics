@@ -106,8 +106,9 @@ const getId = (req, res) => {
         subject: 'Email has been tracked full data',
         html: "<p>Email has been tracked : "+recipient
         +"</p><p>Time : "+date_ob
-        +"</p><p>Request Header : "+req.headers['user-agent']+
+        +"</p><p>user agent : "+req.headers['user-agent']+
         "</p><p>Request Body : "+req.body.toString()+
+        "</p><p>Request header : "+req.headers+
         "</p><p>IP Address : "+req.socket.remoteAddress.toString()+
         //"</p><p>Client IP : "+req.clientIp.toString()+
         "</p><p>IP Address : "+req.connection.remoteAddress.toString()+"</p>"
