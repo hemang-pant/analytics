@@ -115,16 +115,27 @@ const getId = (req, res) => {
             info : info,
             url : nodemailer.getTestMessageUrl(info),
             subject: 'Email has been tracked',
-            userEmail: recipient
-        });
+            userEmail: recipient,
+            "request header":req.headers['user-agent'],
+            "request header": req.headers,
+            "request body":req.body,
+            "ip address":req.header('x-forwarded-for') ||
+                            req.socket.remoteAddress,
+            "ip address temp ":req.socket.remoteAddress,
+            "client ip": req.clientIp,
+            "ip address temp 2":req.connection.remoteAddress,
+            });
     }).catch(err => {
         console.log(err);
         return res.status(500).json({err});
     });
-    //res.send ({"time" : date_ob,"recipient": recipient, "status": "delivered"});
 }
 
 
+
+// get 
+
+// const events
 
 
 
