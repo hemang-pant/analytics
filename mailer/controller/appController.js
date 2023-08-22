@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
+var uap = require('ua-parser-js');
 
 
 const testMail = async (req, res) => {
@@ -88,7 +89,13 @@ const sendMail = (req, res) => {
 const getId = (req, res) => {
     var recipient = req.params['recipient'];
     var date_ob = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var ua = uap(req.headers['user-agent']);
+    var getHighEntropyValues = 'Sec-CH-UA-Full-Version-List, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Bitness';
+    res.setHeader('Accept-CH', getHighEntropyValues);
+    res.setHeader('Critical-CH', getHighEntropyValues);
     
+    //var ua = uap(req.headers).withClientHints();
+
     const user = process.env.USER;
     const pass = process.env.PASS;
     let config = {
@@ -106,7 +113,7 @@ const getId = (req, res) => {
         subject: 'Email has been tracked full data',
         html: "<p>Email has been tracked : "+recipient
         +"</p><p>Time : "+date_ob
-        +"</p><p>user agent : "+req.headers['user-agent']+
+        +"</p><p>user agent : "+ua+
         "</p><p>Request Body : "+req.body.toString()+
         "</p><p>Request header : "+req.headers.toString()+
         "</p><p>IP Address : "+req.socket.remoteAddress.toString()+
