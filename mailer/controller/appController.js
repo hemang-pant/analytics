@@ -1,0 +1,114 @@
+const nodemailer = require('nodemailer');
+require('dotenv').config();
+
+
+const testMail = async (req, res) => {
+    let user;
+    let pass;
+    let testAccount = await nodemailer.createTestAccount().then((account) => {
+        console.log(account);
+        user = account.user;
+        pass = account.pass;
+    });
+    testAccount;
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email', port: 587, secure: false,
+        tls: {
+            rejectUnauthorized: true,
+            minVersion: "TLSv1.2"
+        },
+        auth: {
+          // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+          user: user,
+          pass: pass,
+        }
+      });
+
+    let message = {
+    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    to: "hemangpant2002@gmail.com, xniyan1@gmail.com", // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // plain text body
+    html: "<b>Hello world?</b>", // html body
+    };
+
+    transporter.sendMail(message).then(info => {
+        console.log("Message sent: %s", info.messageId);
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        return res.status(201).json({message: "YOU SHOULD RECEIVE AN EMAIL..!"});
+    }).catch(err => {
+        console.log(err);
+        return res.status(500).json({err});
+    });
+    
+
+
+    // res.status(201).json("Signup Successfully..!");
+}
+
+const sendMail = (req, res) => {
+
+
+    const { userEmail, subject } = req.body;
+    const user = process.env.USER;
+    const pass = process.env.PASS;
+    let config = {
+        service: 'gmail',
+        auth: {
+            user: user,
+            pass: pass
+        }
+    }
+    let transporter = nodemailer.createTransport(config);
+
+    let message = {
+        from: 'hemangpant2002@gmail.com',
+        to: userEmail,
+        subject: subject,
+        html: '<p>script starts <script>var text = httpGet("http://localhost:5000/api/tracker/'+userEmail+'");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><Hi this is visible content or your message body</p><img src = "" style="display:none">  <picture><source media="(min-width:465px)" srcset="http://localhost:5000/api/tracker/xniyan1@gmail.com"><img src="http://localhost:5000/api/tracker/xniyan1@gmail.com" alt="Flowers" style="width:auto;"></picture>' 
+    }
+    console.log('"http://localhost:5000/api/tracker/'+userEmail+'">');
+
+    transporter.sendMail(message).then(info => {
+        console.log("Message sent: %s", info.messageId);
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        return res.status(201).json({
+            message: "YOU SHOULD RECEIVE AN EMAIL..!",
+            info : info,
+            url : nodemailer.getTestMessageUrl(info),
+            subject: subject,
+            userEmail: userEmail
+        });
+    }).catch(err => {
+        console.log(err);
+        return res.status(500).json({err});
+    });
+}
+
+const getId = (req, res) => {
+    var recipient = req.params['recipient'];
+    var date_ob = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    console.log(recipient);
+    console.log("Hello World");
+    console.log(date_ob);
+    console.log(recipient);
+    console.log("Hello World");
+    console.log(date_ob);
+    console.log(recipient);
+    console.log("Hello World");
+    console.log(date_ob);
+    console.log(recipient);
+    console.log("Hello World");
+    console.log(date_ob);
+
+    res.send ({"time" : date_ob,"recipient": recipient, "status": "delivered"});
+}
+
+
+
+
+
+
+module.exports = {
+    testMail, sendMail, getId
+}

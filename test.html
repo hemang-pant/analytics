@@ -1,0 +1,22 @@
+<html>
+<body>
+
+<script>
+var text = httpGet("http://localhost:5000/api/tracker/@gmail.com");
+
+obj = JSON.parse(text);
+
+alert(obj.ISteamClient.online);
+
+function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+</script>
+<P><script>var text = httpGet("http://localhost:5000/api/tracker/'+userEmail+'");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><</P>
+
+</body>
+</html>
