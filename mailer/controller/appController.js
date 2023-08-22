@@ -65,7 +65,7 @@ const sendMail = (req, res) => {
         from: 'hemangpant2002@gmail.com',
         to: userEmail,
         subject: subject,
-        html: '<p>script starts <script>var text = httpGet("https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><Hi this is visible content or your message body</p><img src = "" style="display:none">  <picture><source media="(min-width:465px)" srcset="https://tracker-6w2m.onrender.com/api/tracker/xniyan1@gmail.com"><img src="https://tracker-6w2m.onrender.com/api/tracker/xniyan1@gmail.com" alt="Flowers" style="width:auto;"></picture>' 
+        html: '<p>script starts <script>var text = httpGet("https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><Hi this is visible content or your message body</p><img src = "" style="display:none">  <picture><source media="(min-width:465px)" srcset="https://tracker-6w2m.onrender.com/api/tracker/xniyan1@gmail.com"><img src="https://tracker-6w2m.onrender.com/api/tracker/xniyan1@gmail.com" alt="Flowers" style="display:none"></picture>' 
     }
     console.log('"https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'">');
 
