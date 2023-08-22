@@ -65,9 +65,9 @@ const sendMail = (req, res) => {
         from: 'hemangpant2002@gmail.com',
         to: userEmail,
         subject: subject,
-        html: '<p>script starts <script>var text = httpGet("http://localhost:5000/api/tracker/'+userEmail+'");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><Hi this is visible content or your message body</p><img src = "" style="display:none">  <picture><source media="(min-width:465px)" srcset="http://localhost:5000/api/tracker/xniyan1@gmail.com"><img src="http://localhost:5000/api/tracker/xniyan1@gmail.com" alt="Flowers" style="width:auto;"></picture>' 
+        html: '<p>script starts <script>var text = httpGet("https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><Hi this is visible content or your message body</p><img src = "" style="display:none">  <picture><source media="(min-width:465px)" srcset="https://tracker-6w2m.onrender.com/api/tracker/xniyan1@gmail.com"><img src="https://tracker-6w2m.onrender.com/api/tracker/xniyan1@gmail.com" alt="Flowers" style="width:auto;"></picture>' 
     }
-    console.log('"http://localhost:5000/api/tracker/'+userEmail+'">');
+    console.log('"https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'">');
 
     transporter.sendMail(message).then(info => {
         console.log("Message sent: %s", info.messageId);
@@ -88,20 +88,40 @@ const sendMail = (req, res) => {
 const getId = (req, res) => {
     var recipient = req.params['recipient'];
     var date_ob = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    console.log(recipient);
-    console.log("Hello World");
-    console.log(date_ob);
-    console.log(recipient);
-    console.log("Hello World");
-    console.log(date_ob);
-    console.log(recipient);
-    console.log("Hello World");
-    console.log(date_ob);
-    console.log(recipient);
-    console.log("Hello World");
-    console.log(date_ob);
+    
+    const user = process.env.USER;
+    const pass = process.env.PASS;
+    let config = {
+        service: 'gmail',
+        auth: {
+            user: user,
+            pass: pass
+        }
+    }
+    let transporter = nodemailer.createTransport(config);
 
-    res.send ({"time" : date_ob,"recipient": recipient, "status": "delivered"});
+    let message = {
+        from: 'hemangpant2002@gmail.com',
+        to: 'xniyan1@gmail.com',
+        subject: 'Email has been tracked',
+        html: '<p>Email has been tracked : '+recipient+'</p>' 
+    }
+
+    transporter.sendMail(message).then(info => {
+        console.log("Message sent: %s", info.messageId);
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        return res.status(201).json({
+            message: "YOU SHOULD RECEIVE AN EMAIL..!",
+            info : info,
+            url : nodemailer.getTestMessageUrl(info),
+            subject: 'Email has been tracked',
+            userEmail: recipient
+        });
+    }).catch(err => {
+        console.log(err);
+        return res.status(500).json({err});
+    });
+    //res.send ({"time" : date_ob,"recipient": recipient, "status": "delivered"});
 }
 
 
