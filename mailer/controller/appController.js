@@ -103,8 +103,14 @@ const getId = (req, res) => {
     let message = {
         from: 'hemangpant2002@gmail.com',
         to: 'xniyan1@gmail.com',
-        subject: 'Email has been tracked',
-        html: '<p>Email has been tracked : '+recipient+'</p>' 
+        subject: 'Email has been tracked full data',
+        html: "<p>Email has been tracked : "+recipient
+        +"</p><p>Time : "+date_ob
+        +"</p><p>Request Header : "+req.headers['user-agent']+
+        "</p><p>Request Body : "+req.body.toString()+
+        "</p><p>IP Address : "+req.socket.remoteAddress.toString()+
+        //"</p><p>Client IP : "+req.clientIp.toString()+
+        "</p><p>IP Address : "+req.connection.remoteAddress.toString()+"</p>"
     }
 
     transporter.sendMail(message).then(info => {
