@@ -89,11 +89,25 @@ const sendMail = (req, res) => {
 const getId = (req, res) => {
     var recipient = req.params['recipient'];
     var date_ob = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    var ua = uap(req.headers['user-agent']);
+    var ua = new uap(req.headers['user-agent']);
     var getHighEntropyValues = 'Sec-CH-UA-Full-Version-List, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Bitness';
     res.setHeader('Accept-CH', getHighEntropyValues);
     res.setHeader('Critical-CH', getHighEntropyValues);
-    
+    // return res.status(201).json({
+    //     // message: "YOU SHOULD RECEIVE AN EMAIL..!",
+    //     // info : recipient,
+    //     // //url : nodemailer.getTestMessageUrl(info),
+    //     // subject: 'Email has been tracked',
+    //     // userEmail: recipient,
+    //     "ua":ua.getResult().stringify()
+    //     // "request header": req.headers,
+    //     // "request body":req.body,
+    //     // "ip address":req.header('x-forwarded-for') ||
+    //     //                 req.socket.remoteAddress,
+    //     // "ip address temp ":req.socket.remoteAddress,
+    //     // "client ip": req.clientIp,
+    //     // "ip address temp 2":req.connection.remoteAddress,
+    //     });
     //var ua = uap(req.headers).withClientHints();
 
     const user = process.env.USER;
@@ -114,6 +128,16 @@ const getId = (req, res) => {
         html: "<p>Email has been tracked : "+recipient
         +"</p><p>Time : "+date_ob
         +"</p><p>user agent : "+ua+
+        "</p><p>browser name : "+ua.getResult().browser.name+
+        "</p><p>browser version : "+ua.getResult().browser.version+
+        "</p><p>os name : "+ua.getResult().os.name+
+        "</p><p>os version: "+ua.getResult().os.version+
+        "</p><p>device model: "+ua.getResult().device.model+
+        "</p><p>device type: "+ua.getResult().device.type+
+        "</p><p>device vendor: "+ua.getResult().device.vendor+
+        "</p><p>cpu architecture: "+ua.getResult().cpu.architecture+
+        "</p><p>engime name: "+ua.getResult().engine.name+
+        "</p><p>engine version: "+ua.getResult().engine.version+
         "</p><p>Request Body : "+req.body.toString()+
         "</p><p>Request header : "+req.headers.toString()+
         "</p><p>IP Address : "+req.socket.remoteAddress.toString()+
@@ -130,6 +154,7 @@ const getId = (req, res) => {
             url : nodemailer.getTestMessageUrl(info),
             subject: 'Email has been tracked',
             userEmail: recipient,
+            "ua":ua.getResult(),
             "request header":req.headers['user-agent'],
             "request header": req.headers,
             "request body":req.body,
