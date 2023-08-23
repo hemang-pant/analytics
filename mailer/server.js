@@ -12,12 +12,13 @@ const {
 // minute update
 cron.schedule('* * * * *', () => {
   console.log('running a task every minute');
-  DeleteData('metrics','realtime-update',)
+  //DeleteData('metrics','realtime-update',)
   // added minute data to firestore database
   AddData('metrics','minute-update',Date(),({"time" : Date(), "datafield1": "datafield1", "datafield2": "datafield2" }), Date().slice(0, 16).replace('T', ' '));
 });
 
 console.log("funciton calling")
+// DeleteData('metrics','minute-update',)
 
 
 
@@ -33,6 +34,7 @@ console.log("funciton calling")
 // hour update
 cron.schedule('0 * * * *', () => {
     console.log('running a task every hour');
+    DeleteData('metrics','minute-update',)
     // added hour data to firestore database
     // delete minute details from firestore database
 });

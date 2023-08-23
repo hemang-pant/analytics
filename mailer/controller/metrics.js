@@ -13,9 +13,13 @@ var currentIndex = Date().toString();
 
 
 
-const DeleteData = async (collection, doc) => {
+const DeleteData = async (collection, doc,) => {
     try {
-        await db.collection(collection).doc(doc).delete();
+
+        await db.collection(collection).doc(doc).collection('timeseries').get().then(async (res) => {res.forEach(element => {
+            element.ref.delete();
+          });
+        });
         console.log("Document successfully deleted!");
         db.collection(collection).doc(doc).set({"timeseries": [
         ]});
@@ -79,6 +83,9 @@ const UpdateData = async (collection, doc, isDesktop, isMobile, isTablet) => {
                 db.collection(collection).doc(doc).collection('timeseries').doc(lastdoc.docs[0].data().time).set({
                     time: lastdoc.docs[0].data().time,
                     totalOpens: lastdoc.docs[0].data().totalOpens+1,
+                    isDesktop: isDesktop,
+                    isMobile: isMobile,
+                    isTablet: isTablet,
                 });
 
                 //const washingtonRef =await  db.collection(collection).doc(doc).collection('timeseries').doc(timedata).get();
