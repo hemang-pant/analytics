@@ -169,8 +169,8 @@ const getId = (req, res) => {
             UpdateData(
                 'metrics',
                 'minute-update',
-                ua.getResult().device.type == "desktop" ? true : false,
                 ua.getResult().os.name == "Windows"||"Mac OS" ? true : false,
+                ua.getResult().device.type == "mobile" ? true : false,
                 ua.getResult().device.type == "tablet" ? true : false,
             );
             eventRef.set({
