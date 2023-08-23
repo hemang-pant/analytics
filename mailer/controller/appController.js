@@ -330,10 +330,6 @@ const getMetrics = (req, res) => {
     try{
         minuteref = db.collection('metrics').doc('minute-update').collection('timeseries').orderBy("time", "desc");
         hourref = db.collection('metrics').doc('hourly-update').collection('timeseries').orderBy("time", "desc");
-        dayref = db.collection('metrics').doc('daily-update').collection('timeseries').orderBy("time", "desc");
-        weekref = db.collection('metrics').doc('weekly-update').collection('timeseries').orderBy("time", "desc");
-        monthref = db.collection('metrics').doc('monthly-update').collection('timeseries').orderBy("time", "desc");
-        yearref = db.collection('metrics').doc('yearly-update').collection('timeseries').orderBy("time", "desc");
         totalDesktop = 0;
         totalMobile = 0;
         totalTablet = 0;
@@ -364,33 +360,7 @@ const getMetrics = (req, res) => {
                 });
             }
         });
-        dayref.get().then((res) => {
-            if (!res.empty) {
-                res.forEach((doc) => {
-                    totalDesktop += doc.data().totalDesktop;
-                    totalMobile += doc.data().totalMobile;
-                    totalTablet += doc.data().totalTablet;
-                    timeseries.push({
-                        totalOpens: doc.data().totalOpens,
-                        time: doc.data().time
-                    });
-                });
-            }
-        });
-        weekref.get().then((res) => {
-            if (!res.empty) {
-                res.forEach((doc) => {
-                    totalDesktop += doc.data().totalDesktop;
-                    totalMobile += doc.data().totalMobile;
-                    totalTablet += doc.data().totalTablet;
-
-                    timeseries.push({
-                        totalOpens: doc.data().totalOpens,
-                        time: doc.data().time
-                    });
-                });
-            }
-        });
+        
         payload = {
             opens_by_device: {
               desktop: 100,
