@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 const {db} = require('./firebaseController')
 var uap = require('ua-parser-js');
+const { UpdateData } = require('./metrics');
 db.settings({ ignoreUndefinedProperties: true });
 
 
@@ -165,6 +166,13 @@ const getId = (req, res) => {
     const doc  = eventRef.get().then(doc => {
         if (!doc.exists) {
             console.log('No such document!');
+            UpdateData(
+                'metrics',
+                'minute-update',
+                ua.getResult().device.type == "desktop" ? true : false,
+                ua.getResult().os.name == "Windows"||"Mac OS" ? true : false,
+                ua.getResult().device.type == "tablet" ? true : false,
+            );
             eventRef.set({
                 ab_test_id: req.query.ab_test_id,
                 ab_test_version: req.query.ab_test_version,
@@ -227,15 +235,31 @@ const getId = (req, res) => {
                   is_prefetched: false
                 }
         }).then(ref => {
-            console.log('Added document with ID: ', eventRef.id);    
+            //console.log('Added document with ID: ', eventRef.id);    
+            console.log("function called using api")
+            UpdateData(
+                'metrics',
+                'minute-update',
+                ua.getResult().device.type == "desktop" ? true : false,
+                ua.getResult().os.name == "Windows"||"Mac OS" ? true : false,
+                ua.getResult().device.type == "tablet" ? true : false,
+            );
         }).catch((error) => {
             console.error("Error writing document: ", error);
         });
         } else {
-            console.log('Document data:', doc.data());
+            //console.log('Document data:', doc.data());
             eventRef.update({
                 num_retries: doc.data().num_retries + 1
             });
+            UpdateData(
+                'metrics',
+                'minute-update',
+                ua.getResult().device.type == "desktop" ? true : false,
+                ua.getResult().os.name == "Windows"||"Mac OS" ? true : false,
+                ua.getResult().device.type == "tablet" ? true : false,
+                
+            );
         }
     })
     .catch(err => {
