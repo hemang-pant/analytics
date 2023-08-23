@@ -38,7 +38,7 @@ const AddData = async (collection, doc, data, timestamp) => {
         await db.collection(collection).doc(doc).get().then(async (res) => {
             if (res.exists) {
                 console.log("function processing")
-                const washingtonRef =await  db.collection(collection).doc(doc).collection('timeseries').doc(timedata).get();
+                //const washingtonRef =await  db.collection(collection).doc(doc).collection('timeseries').doc(timedata).get();
             db.collection(collection).doc(doc).collection('timeseries').doc(timedata).set({
                 totalOpens: 0,
                 time: timedata,
