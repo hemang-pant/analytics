@@ -363,38 +363,14 @@ const getMetrics = (req, res) => {
         
         payload = {
             opens_by_device: {
-              desktop: 100,
-              mobile: 80,
-              tablet: 49,
+              desktop: totalDesktop,
+              mobile: totalMobile,
+              tablet: totalTablet,
             },
             // calculates every minute
-            timeseries: [
-              {
-                totalOpens: 1200,
-                time: '8/19/2023, 6:48:00 PM'
-              },
-              {
-                totalOpens: 200,
-                time: '8/19/2023, 6:49:00 PM'
-              },
-              {
-                totalOpens: 0,
-                time: '8/19/2023, 6:50:00 PM'
-              },
-              {
-                totalOpens: 200030,
-                time: '8/19/2023, 6:51:00 PM'
-              },
-              {
-                totalOpens: 10,
-                time: '8/19/2023, 6:52:00 PM'
-              },
-              {
-                totalOpens: 90,
-                time: '8/19/2023, 6:53:00 PM'
-              },
-            ]
+            timeseries: timeseries,
           }
+        return res.status(201).json(payload);
     }
     catch(err){
         console.log(err);
