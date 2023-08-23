@@ -77,6 +77,7 @@ const sendMail = (req, res) => {
     }).catch((error) => {
         console.error("Error writing document: ", error);
     });
+    var message_size = 0;
     let message = {
         
         from: 'hemangpant2002@gmail.com',
@@ -88,7 +89,7 @@ const sendMail = (req, res) => {
         '&ab_test_version='+version+
         '&campaign_id='+campaign_id+
         '&customer_id='+customer_id+
-        '&msg_size='+'1337'+
+        '&msg_size='+message_size+
         '&message_id='+eventRef.id+
         '&subject='+subject+
         '&template_id='+template_id+
@@ -118,7 +119,7 @@ const sendMail = (req, res) => {
         '" alt="Flowers" style="display:none"></picture>'
     }
     console.log('"https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'">');
-
+    message_size = message.html.length;
     transporter.sendMail(message).then(info => {
         console.log("Message sent: %s", info.messageId);
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
@@ -161,70 +162,84 @@ const getId = (req, res) => {
 
     // upload data to firestore
     var eventRef = db.collection('events').doc(req.query.message_id);
-    eventRef.set({
-            ab_test_id: req.query.ab_test_id,
-            ab_test_version: req.query.ab_test_version,
-            amp_enabled: true,
-            campaign_id: req.query.campaign_id,
-            click_tracking: true,
-            customer_id: req.query.customer_id,
-            delv_method: "esmtp",
-            event_id: eventRef.id,
-            friendly_from: recipient,
-            geo_ip: {
-              country: "not defined",
-              region: "not defined",
-              city: "not defined",
-              latitude: "not defined",
-              longitude: "not defined",
-              zip: "not defined",
-              postal_code: "node defined"
-            },
-            injection_time: date_ob,
-            initial_pixel: true,
-            ip_address: req.ip,
-            ip_pool: req.ip,
-            mailbox_provider: "not tracked",
-            mailbox_provider_region: "not tracked",
-            message_id: req.query.message_id,
-            msg_from: process.env.USER,
-            msg_size: req.query.msg_size,
-            open_tracking: true,
-            queue_time: "12",
-            rcpt_meta: {
-              customKey: "customValue"
-            },
-            rcpt_tags: ["undefined"],
-            rcpt_to: recipient,
-            rcpt_hash: "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
-            raw_rcpt_to: recipient,
-            rcpt_type: "cc",
-            recipient_domain: "example.com",
-            routing_domain: "example.com",
-            scheduled_time: "node defined",
-            sending_ip: "not defined",
-            subaccount_id: "not defined",
-            subject: req.query.subject,
-            template_id: req.query.template_id,
-            template_version: req.query.template_version,
-            timestamp: "1588348800",
-            transmission_id: "65832150921904138",
-            type: "open",
-            user_agent: req.headers['user-agent'],
-            user_agent_parsed: {
-              agent_family: ua.getResult().browser.name,
-              device_brand: ua.getResult().device.vendor,
-              device_family: ua.getResult().device.model,
-              os_family: ua.getResult().os.name,
-              os_version: ua.getResult().os.version,
-              is_mobile: ua.getResult().device.type == "mobile" ? true : false,
-              is_proxy: false,
-              is_prefetched: false
-            }
-    }).then(ref => {
-        console.log('Added document with ID: ', eventRef.id);    
-    }).catch((error) => {
-        console.error("Error writing document: ", error);
+    const doc  = eventRef.get().then(doc => {
+        if (!doc.exists) {
+            console.log('No such document!');
+            eventRef.set({
+                ab_test_id: req.query.ab_test_id,
+                ab_test_version: req.query.ab_test_version,
+                amp_enabled: true,
+                campaign_id: req.query.campaign_id,
+                click_tracking: true,
+                customer_id: req.query.customer_id,
+                delv_method: "esmtp",
+                event_id: eventRef.id,
+                friendly_from: recipient,
+                geo_ip: {
+                  country: "not defined",
+                  region: "not defined",
+                  city: "not defined",
+                  latitude: "not defined",
+                  longitude: "not defined",
+                  zip: "not defined",
+                  postal_code: "node defined"
+                },
+                injection_time: date_ob,
+                initial_pixel: true,
+                ip_address: req.ip,
+                ip_pool: req.ip,
+                mailbox_provider: "not tracked",
+                mailbox_provider_region: "not tracked",
+                message_id: req.query.message_id,
+                msg_from: process.env.USER,
+                msg_size: req.query.msg_size,
+                num_retries: 1,
+                open_tracking: true,
+                queue_time: "12",
+                rcpt_meta: {
+                  customKey: "customValue"
+                },
+                rcpt_tags: ["undefined"],
+                rcpt_to: recipient,
+                rcpt_hash: "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
+                raw_rcpt_to: recipient,
+                rcpt_type: "cc",
+                recipient_domain: "example.com",
+                routing_domain: "example.com",
+                scheduled_time: "node defined",
+                sending_ip: "not defined",
+                subaccount_id: "not defined",
+                subject: req.query.subject,
+                template_id: req.query.template_id,
+                template_version: req.query.template_version,
+                timestamp: "1588348800",
+                transmission_id: "65832150921904138",
+                type: "open",
+                user_agent: req.headers['user-agent'],
+                user_agent_parsed: {
+                  agent_family: ua.getResult().browser.name,
+                  device_brand: ua.getResult().device.vendor,
+                  device_family: ua.getResult().device.model,
+                  os_family: ua.getResult().os.name,
+                  os_version: ua.getResult().os.version,
+                  is_mobile: ua.getResult().device.type == "mobile" ? true : false,
+                  is_proxy: false,
+                  is_prefetched: false
+                }
+        }).then(ref => {
+            console.log('Added document with ID: ', eventRef.id);    
+        }).catch((error) => {
+            console.error("Error writing document: ", error);
+        });
+        } else {
+            console.log('Document data:', doc.data());
+            eventRef.update({
+                num_retries: doc.data().num_retries + 1
+            });
+        }
+    })
+    .catch(err => {
+        console.log('Error getting document', err);
     });
 
     const user = process.env.USER;
