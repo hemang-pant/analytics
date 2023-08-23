@@ -94,7 +94,6 @@ const UpdateData = async (collection, doc, isDesktop, isMobile, isTablet) => {
                     totalMobile: lastdoc.docs[0].data().isMobile+isMobile,
                     totalTablet: lastdoc.docs[0].data().isTablet+isTablet,
                 });
-
                 //const washingtonRef =await  db.collection(collection).doc(doc).collection('timeseries').doc(timedata).get();
                 // db.collection(collection).doc(doc).collection('timeseries').doc(currentIndex).set({
                 //     totalOpens: admin.firestore.FieldValue.increment(1),
