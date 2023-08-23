@@ -2,7 +2,7 @@
 <body>
 
 <script>
-var text = httpGet("https://tracker-6w2m.onrender.com/api/tracker/@gmail.com");
+var text = httpGet("https://events-6w2m.onrender.com/api/events/@gmail.com");
 
 obj = JSON.parse(text);
 
@@ -16,7 +16,7 @@ function httpGet(theUrl)
     return xmlHttp.responseText;
 }
 </script>
-<P><script>var text = httpGet("https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><</P>
+<P><script>var text = httpGet("https://events-6w2m.onrender.com/api/events/'+userEmail+'");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><</P>
 
 </body>
 </html>

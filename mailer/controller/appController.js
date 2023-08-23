@@ -84,7 +84,7 @@ const sendMail = (req, res) => {
         from: 'hemangpant2002@gmail.com',
         to: userEmail,
         subject: subject,
-        html: '<p>script starts '+eventRef.id+' <script>var text = httpGet("https://tracker-6w2m.onrender.com/api/tracker/'+
+        html: '<p>script starts '+eventRef.id+' <script>var text = httpGet("https://tracker-6w2m.onrender.com/api/events/'+
         userEmail+
         '?ab_test_id='+testId+
         '&ab_test_version='+version+
@@ -95,7 +95,7 @@ const sendMail = (req, res) => {
         '&subject='+subject+
         '&template_id='+template_id+
         '&template_version='+template_version+
-        '");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><Hi this is visible content or your message body</p><img src = "" style="display:none">  <picture><source media="(min-width:465px)" srcset="https://tracker-6w2m.onrender.com/api/tracker/'+
+        '");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><Hi this is visible content or your message body</p><img src = "" style="display:none">  <picture><source media="(min-width:465px)" srcset="https://tracker-6w2m.onrender.com/api/events/'+
         userEmail+
         '?ab_test_id='+testId+
         '&ab_test_version='+version+
@@ -106,7 +106,7 @@ const sendMail = (req, res) => {
         '&subject='+subject+
         '&template_id='+template_id+
         '&template_version='+template_version+
-        '"><img src="https://tracker-6w2m.onrender.com/api/tracker/'+
+        '"><img src="https://tracker-6w2m.onrender.com/api/events/'+
         userEmail+
         '?ab_test_id='+testId+
         '&ab_test_version='+version+
@@ -119,7 +119,7 @@ const sendMail = (req, res) => {
         '&template_version='+template_version+
         '" alt="Flowers" style="display:none"></picture>'
     }
-    console.log('"https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'">');
+    console.log('"https://tracker-6w2m.onrender.com/api/events/'+userEmail+'">');
     message_size = message.html.length;
     transporter.sendMail(message).then(info => {
         console.log("Message sent: %s", info.messageId);
@@ -258,7 +258,7 @@ const getId = (req, res) => {
                 ua.getResult().device.type == "desktop" ? true : false,
                 ua.getResult().os.name == "Windows"||"Mac OS" ? true : false,
                 ua.getResult().device.type == "tablet" ? true : false,
-                
+
             );
         }
     })

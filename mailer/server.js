@@ -22,27 +22,23 @@ console.log("funciton calling")
 
 
 
-//AddData('metrics','minute-update',Date(),({"time" : Date(), "datafield1": "datafield1", "datafield2": "datafield2" }), Date().slice(0, 16).replace('T', ' '));
-//UpdateData('metrics','minute-update',Date(),({"time" : Date(), "datafield1": "datafield1", "datafield2": "datafield2" }), Date().slice(0, 16).replace('T', ' '))
-
-
-
-
-
-
 
 // hour update
 cron.schedule('0 * * * *', () => {
     console.log('running a task every hour');
-    DeleteData('metrics','minute-update',)
+    AggregateData('metrics','minute-update','hourly-update').then(
+        DeleteData('metrics','minute-updates',)
+    )
+    //DeleteData('metrics','minute-update',)
     // added hour data to firestore database
     // delete minute details from firestore database
 });
 
+// AggregateData('metrics','minute-update','hourly-update')
+
 // day update
 cron.schedule('0 0 * * *', () => {
     console.log('running a task every day');
-    DeleteData('metrics','minute-updates',)
     // added day data to firestore database
     // delete hour details from firestore database
 });
