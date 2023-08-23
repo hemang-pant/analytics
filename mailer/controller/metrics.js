@@ -47,9 +47,9 @@ const AddData = async (collection, doc, data, timestamp) => {
             db.collection(collection).doc(doc).collection('timeseries').doc(timedata).set({
                 time: timedata,
                 totalOpens: 0,
-                isDesktop: false,
-                isMobile: false,
-                isTablet: false,
+                    totalDesktop: 0,
+                    totalDesktop: 0,
+                    totalTablet: 0,
             });
             console.log('temp')
             currentIndex = timedata;
@@ -58,9 +58,9 @@ const AddData = async (collection, doc, data, timestamp) => {
                 db.collection(collection).doc(doc).collection('timeseries').doc(timedata).set({
                     time: timedata,
                     totalOpens: 0,
-                    isDesktop: false,
-                    isMobile: false,
-                    isTablet: false,
+                    totalDesktop: 0,
+                    totalDesktop: 0,
+                    totalTablet: 0,
                 }).then(async () => {
                     currentIndex = timedata;
                     console.log("Document successfully updated! 1 ");
@@ -90,9 +90,9 @@ const UpdateData = async (collection, doc, isDesktop, isMobile, isTablet) => {
                 db.collection(collection).doc(doc).collection('timeseries').doc(lastdoc.docs[0].data().time).set({
                     time: lastdoc.docs[0].data().time,
                     totalOpens: lastdoc.docs[0].data().totalOpens+1,
-                    isDesktop: isDesktop,
-                    isMobile: isMobile,
-                    isTablet: isTablet,
+                    totalDesktop: lastdoc.docs[0].data().totalDesktop+isDesktop,
+                    isMobile: lastdoc.docs[0].data().isMobile+isMobile,
+                    isTablet: lastdoc.docs[0].data().isTablet+isTablet,
                 });
 
                 //const washingtonRef =await  db.collection(collection).doc(doc).collection('timeseries').doc(timedata).get();

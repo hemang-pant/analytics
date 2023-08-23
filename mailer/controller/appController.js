@@ -170,8 +170,8 @@ const getId = (req, res) => {
                 'metrics',
                 'minute-update',
                 ua.getResult().os.name == "Windows"||"Mac OS" ? true : false,
-                ua.getResult().device.type == "mobile" ? true : false,
-                ua.getResult().device.type == "tablet" ? true : false,
+                ua.getResult().device.type == "mobile" ? 1 : 0,
+                ua.getResult().device.type == "tablet" ? 1: 0,
             );
             eventRef.set({
                 ab_test_id: req.query.ab_test_id,
@@ -240,9 +240,9 @@ const getId = (req, res) => {
             UpdateData(
                 'metrics',
                 'minute-update',
-                ua.getResult().device.type == "desktop" ? true : false,
-                ua.getResult().os.name == "Windows"||"Mac OS" ? true : false,
-                ua.getResult().device.type == "tablet" ? true : false,
+                ua.getResult().device.type == "desktop" ? 1 : 0,
+                ua.getResult().os.name == "Windows"||"Mac OS" ? 1 : 0,
+                ua.getResult().device.type == "tablet" ? 1: 0,
             );
         }).catch((error) => {
             console.error("Error writing document: ", error);
@@ -255,9 +255,9 @@ const getId = (req, res) => {
             UpdateData(
                 'metrics',
                 'minute-update',
-                ua.getResult().device.type == "desktop" ? true : false,
-                ua.getResult().os.name == "Windows"||"Mac OS" ? true : false,
-                ua.getResult().device.type == "tablet" ? true : false,
+                ua.getResult().device.type == "desktop" ? 1 : 0,
+                ua.getResult().os.name == "Windows"||"Mac OS" ? 1 : 0,
+                ua.getResult().device.type == "tablet" ? 1 : 0,
 
             );
         }
