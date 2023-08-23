@@ -91,8 +91,8 @@ const UpdateData = async (collection, doc, isDesktop, isMobile, isTablet) => {
                     time: lastdoc.docs[0].data().time,
                     totalOpens: lastdoc.docs[0].data().totalOpens+1,
                     totalDesktop: lastdoc.docs[0].data().totalDesktop+isDesktop,
-                    isMobile: lastdoc.docs[0].data().isMobile+isMobile,
-                    isTablet: lastdoc.docs[0].data().isTablet+isTablet,
+                    totalMobile: lastdoc.docs[0].data().isMobile+isMobile,
+                    totalTablet: lastdoc.docs[0].data().isTablet+isTablet,
                 });
 
                 //const washingtonRef =await  db.collection(collection).doc(doc).collection('timeseries').doc(timedata).get();
