@@ -48,7 +48,7 @@ const AddData = async (collection, doc, data, timestamp) => {
                 time: timedata,
                 totalOpens: 0,
                     totalDesktop: 0,
-                    totalDesktop: 0,
+                    totalMobile: 0,
                     totalTablet: 0,
             });
             console.log('temp')
@@ -59,7 +59,7 @@ const AddData = async (collection, doc, data, timestamp) => {
                     time: timedata,
                     totalOpens: 0,
                     totalDesktop: 0,
-                    totalDesktop: 0,
+                    totalMobile: 0,
                     totalTablet: 0,
                 }).then(async () => {
                     currentIndex = timedata;
