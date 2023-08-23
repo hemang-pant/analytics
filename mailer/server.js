@@ -21,20 +21,20 @@ console.log("funciton calling")
 // DeleteData('metrics','minute-update',)
 
 
+// cron.schedule('*/5 * * * *', () => {
+//     console.log('running a task every two minutes');
+//     AggregateData('metrics','minute-update','hourly-update')
+//   });
 
 
 // hour update
 cron.schedule('0 * * * *', () => {
     console.log('running a task every hour');
-    AggregateData('metrics','minute-update','hourly-update').then(
-        DeleteData('metrics','minute-updates',)
-    )
+    AggregateData('metrics','minute-update','hourly-update')
     //DeleteData('metrics','minute-update',)
     // added hour data to firestore database
     // delete minute details from firestore database
 });
-
-// AggregateData('metrics','minute-update','hourly-update')
 
 // day update
 cron.schedule('0 0 * * *', () => {

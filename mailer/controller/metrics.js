@@ -15,6 +15,7 @@ var currentIndex = Date().toString();
 
 const DeleteData = async (collection, doc,) => {
     try {
+        console.log("deletion started")
 
         await db.collection(collection).doc(doc).collection('timeseries').get().then(async (res) => {res.forEach(element => {
             element.ref.delete();
@@ -46,9 +47,9 @@ const AddData = async (collection, doc, data, timestamp) => {
             db.collection(collection).doc(doc).collection('timeseries').doc(timedata).set({
                 time: timedata,
                 totalOpens: 0,
-                isDesktop: isDesktop,
-                isMobile: isMobile,
-                isTablet: isTablet,
+                isDesktop: false,
+                isMobile: false,
+                isTablet: false,
             });
             console.log('temp')
             currentIndex = timedata;
@@ -57,9 +58,9 @@ const AddData = async (collection, doc, data, timestamp) => {
                 db.collection(collection).doc(doc).collection('timeseries').doc(timedata).set({
                     time: timedata,
                     totalOpens: 0,
-                    isDesktop: isDesktop,
-                    isMobile: isMobile,
-                    isTablet: isTablet,
+                    isDesktop: false,
+                    isMobile: false,
+                    isTablet: false,
                 }).then(async () => {
                     currentIndex = timedata;
                     console.log("Document successfully updated! 1 ");
@@ -152,8 +153,9 @@ const AggregateData = async (collection, doc, collection2) => {
                         totalDesktop: totalDesktop,
                         totalMobile: totalMobile,
                         totalTablet: totalTablet,
-                    });
-                    
+                    }).then(() => {
+                        DeleteData('metrics','minute-update',)
+                    })
                 });
             } else {
                 console.log("No such document!");
