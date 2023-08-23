@@ -21,7 +21,7 @@ console.log("funciton calling")
 
 
 
-AddData('metrics','minute-update',Date(),({"time" : Date(), "datafield1": "datafield1", "datafield2": "datafield2" }), Date().slice(0, 16).replace('T', ' '));
+//AddData('metrics','minute-update',Date(),({"time" : Date(), "datafield1": "datafield1", "datafield2": "datafield2" }), Date().slice(0, 16).replace('T', ' '));
 //UpdateData('metrics','minute-update',Date(),({"time" : Date(), "datafield1": "datafield1", "datafield2": "datafield2" }), Date().slice(0, 16).replace('T', ' '))
 
 
