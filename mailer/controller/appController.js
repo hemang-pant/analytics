@@ -326,6 +326,112 @@ const getId = (req, res) => {
     });
 }
 
+const getMetrics = (req, res) => {
+    try{
+        minuteref = db.collection('metrics').doc('minute-update').collection('timeseries').orderBy("time", "desc");
+        hourref = db.collection('metrics').doc('hourly-update').collection('timeseries').orderBy("time", "desc");
+        dayref = db.collection('metrics').doc('daily-update').collection('timeseries').orderBy("time", "desc");
+        weekref = db.collection('metrics').doc('weekly-update').collection('timeseries').orderBy("time", "desc");
+        monthref = db.collection('metrics').doc('monthly-update').collection('timeseries').orderBy("time", "desc");
+        yearref = db.collection('metrics').doc('yearly-update').collection('timeseries').orderBy("time", "desc");
+        totalDesktop = 0;
+        totalMobile = 0;
+        totalTablet = 0;
+        timeseries = [];
+        minuteref.get().then((res) => {
+            if (!res.empty) {
+                res.forEach((doc) => {
+                    totalDesktop += doc.data().totalDesktop;
+                    totalMobile += doc.data().totalMobile;
+                    totalTablet += doc.data().totalTablet;
+                    timeseries.push({
+                        totalOpens: doc.data().totalOpens,
+                        time: doc.data().time
+                    });
+                });
+            }
+        });
+        hourref.get().then((res) => {
+            if (!res.empty) {
+                res.forEach((doc) => {
+                    totalDesktop += doc.data().totalDesktop;
+                    totalMobile += doc.data().totalMobile;
+                    totalTablet += doc.data().totalTablet;
+                    timeseries.push({
+                        totalOpens: doc.data().totalOpens,
+                        time: doc.data().time
+                    });
+                });
+            }
+        });
+        dayref.get().then((res) => {
+            if (!res.empty) {
+                res.forEach((doc) => {
+                    totalDesktop += doc.data().totalDesktop;
+                    totalMobile += doc.data().totalMobile;
+                    totalTablet += doc.data().totalTablet;
+                    timeseries.push({
+                        totalOpens: doc.data().totalOpens,
+                        time: doc.data().time
+                    });
+                });
+            }
+        });
+        weekref.get().then((res) => {
+            if (!res.empty) {
+                res.forEach((doc) => {
+                    totalDesktop += doc.data().totalDesktop;
+                    totalMobile += doc.data().totalMobile;
+                    totalTablet += doc.data().totalTablet;
+
+                    timeseries.push({
+                        totalOpens: doc.data().totalOpens,
+                        time: doc.data().time
+                    });
+                });
+            }
+        });
+        payload = {
+            opens_by_device: {
+              desktop: 100,
+              mobile: 80,
+              tablet: 49,
+            },
+            // calculates every minute
+            timeseries: [
+              {
+                totalOpens: 1200,
+                time: '8/19/2023, 6:48:00 PM'
+              },
+              {
+                totalOpens: 200,
+                time: '8/19/2023, 6:49:00 PM'
+              },
+              {
+                totalOpens: 0,
+                time: '8/19/2023, 6:50:00 PM'
+              },
+              {
+                totalOpens: 200030,
+                time: '8/19/2023, 6:51:00 PM'
+              },
+              {
+                totalOpens: 10,
+                time: '8/19/2023, 6:52:00 PM'
+              },
+              {
+                totalOpens: 90,
+                time: '8/19/2023, 6:53:00 PM'
+              },
+            ]
+          }
+    }
+    catch(err){
+        console.log(err);
+        return res.status(500).json({err});
+    }
+}
+
 
 
 
@@ -339,5 +445,5 @@ const getId = (req, res) => {
 
 
 module.exports = {
-    testMail, sendMail, getId
+    testMail, sendMail, getId, getMetrics
 }
