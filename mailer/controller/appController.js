@@ -1,6 +1,9 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
+const {db} = require('./firebaseController')
 var uap = require('ua-parser-js');
+db.settings({ ignoreUndefinedProperties: true });
+
 
 
 const testMail = async (req, res) => {
@@ -50,7 +53,11 @@ const testMail = async (req, res) => {
 const sendMail = (req, res) => {
 
 
-    const { userEmail, subject } = req.body;
+    const { userEmail, subject,
+        testId, version, campaign_id,
+        customer_id, messageID, template_id,
+        template_version
+     } = req.body;
     const user = process.env.USER;
     const pass = process.env.PASS;
     let config = {
@@ -61,12 +68,54 @@ const sendMail = (req, res) => {
         }
     }
     let transporter = nodemailer.createTransport(config);
-
+    var eventRef = db.collection('messages').doc();
+    eventRef.set({
+        message_id: eventRef.id,
+            
+    }).then(ref => {
+        console.log('Added document with ID: ', eventRef.id);    
+    }).catch((error) => {
+        console.error("Error writing document: ", error);
+    });
     let message = {
+        
         from: 'hemangpant2002@gmail.com',
         to: userEmail,
         subject: subject,
-        html: '<p>script starts <script>var text = httpGet("https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><Hi this is visible content or your message body</p><img src = "" style="display:none">  <picture><source media="(min-width:465px)" srcset="https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'"><img src="https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'" alt="Flowers" style="display:none"></picture>' 
+        html: '<p>script starts '+eventRef.id+' <script>var text = httpGet("https://tracker-6w2m.onrender.com/api/tracker/'+
+        userEmail+
+        '?ab_test_id='+testId+
+        '&ab_test_version='+version+
+        '&campaign_id='+campaign_id+
+        '&customer_id='+customer_id+
+        '&msg_size='+'1337'+
+        '&message_id='+eventRef.id+
+        '&subject='+subject+
+        '&template_id='+template_id+
+        '&template_version='+template_version+
+        '");obj = JSON.parse(text);alert(obj.ISteamClient.online);function httpGet(theUrl){var xmlHttp = new XMLHttpRequest();xmlHttp.open( "GET", theUrl, false ); xmlHttp.send( null );return xmlHttp.responseText;}</script><Hi this is visible content or your message body</p><img src = "" style="display:none">  <picture><source media="(min-width:465px)" srcset="https://tracker-6w2m.onrender.com/api/tracker/'+
+        userEmail+
+        '?ab_test_id='+testId+
+        '&ab_test_version='+version+
+        '&campaign_id='+campaign_id+
+        '&customer_id='+customer_id+
+        '&msg_size='+1337+
+        '&message_id='+eventRef.id+
+        '&subject='+subject+
+        '&template_id='+template_id+
+        '&template_version='+template_version+
+        '"><img src="https://tracker-6w2m.onrender.com/api/tracker/'+
+        userEmail+
+        '?ab_test_id='+testId+
+        '&ab_test_version='+version+
+        '&campaign_id='+campaign_id+
+        '&customer_id='+customer_id+
+        '&msg_size='+1337+
+        '&message_id='+eventRef.id+
+        '&subject='+subject+
+        '&template_id='+template_id+
+        '&template_version='+template_version+
+        '" alt="Flowers" style="display:none"></picture>'
     }
     console.log('"https://tracker-6w2m.onrender.com/api/tracker/'+userEmail+'">');
 
@@ -109,6 +158,74 @@ const getId = (req, res) => {
     //     // "ip address temp 2":req.connection.remoteAddress,
     //     });
     //var ua = uap(req.headers).withClientHints();
+
+    // upload data to firestore
+    var eventRef = db.collection('events').doc(req.query.message_id);
+    eventRef.set({
+            ab_test_id: req.query.ab_test_id,
+            ab_test_version: req.query.ab_test_version,
+            amp_enabled: true,
+            campaign_id: req.query.campaign_id,
+            click_tracking: true,
+            customer_id: req.query.customer_id,
+            delv_method: "esmtp",
+            event_id: eventRef.id,
+            friendly_from: recipient,
+            geo_ip: {
+              country: "not defined",
+              region: "not defined",
+              city: "not defined",
+              latitude: "not defined",
+              longitude: "not defined",
+              zip: "not defined",
+              postal_code: "node defined"
+            },
+            injection_time: date_ob,
+            initial_pixel: true,
+            ip_address: req.ip,
+            ip_pool: req.ip,
+            mailbox_provider: "not tracked",
+            mailbox_provider_region: "not tracked",
+            message_id: req.query.message_id,
+            msg_from: process.env.USER,
+            msg_size: req.query.msg_size,
+            open_tracking: true,
+            queue_time: "12",
+            rcpt_meta: {
+              customKey: "customValue"
+            },
+            rcpt_tags: ["undefined"],
+            rcpt_to: recipient,
+            rcpt_hash: "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed",
+            raw_rcpt_to: recipient,
+            rcpt_type: "cc",
+            recipient_domain: "example.com",
+            routing_domain: "example.com",
+            scheduled_time: "node defined",
+            sending_ip: "not defined",
+            subaccount_id: "not defined",
+            subject: req.query.subject,
+            template_id: req.query.template_id,
+            template_version: req.query.template_version,
+            timestamp: "1588348800",
+            transmission_id: "65832150921904138",
+            type: "open",
+            user_agent: req.headers['user-agent'],
+            user_agent_parsed: {
+              agent_family: ua.getResult().browser.name,
+              device_brand: ua.getResult().device.vendor,
+              device_family: ua.getResult().device.model,
+              os_family: ua.getResult().os.name,
+              os_version: ua.getResult().os.version,
+              is_mobile: ua.getResult().device.type == "mobile" ? true : false,
+              is_proxy: false,
+              is_prefetched: false
+            }
+    }).then(ref => {
+        console.log('Added document with ID: ', eventRef.id);    
+    }).catch((error) => {
+        console.error("Error writing document: ", error);
+    });
 
     const user = process.env.USER;
     const pass = process.env.PASS;
@@ -169,6 +286,9 @@ const getId = (req, res) => {
         return res.status(500).json({err});
     });
 }
+
+
+
 
 
 
