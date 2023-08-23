@@ -86,13 +86,16 @@ const UpdateData = async (collection, doc, isDesktop, isMobile, isTablet) => {
                 console.log("function processing")
                 const lastdoc = await db.collection(collection).doc(doc).collection('timeseries').orderBy("time", "desc").limit(0).get();
                 console.log("Document data:", lastdoc.docs[0].data().time);
-                console.log("Document data:", lastdoc.docs[0].data().totalOpens);
+                console.log("Document data: ", lastdoc.docs[0].data().totalOpens);
+                console.log("Document data: ", lastdoc.docs[0].data().totalDesktop);
+                console.log("Document data: ", lastdoc.docs[0].data().totalMobile);
+                console.log("Document data: ", lastdoc.docs[0].data().totalTablet);
                 db.collection(collection).doc(doc).collection('timeseries').doc(lastdoc.docs[0].data().time).set({
                     time: lastdoc.docs[0].data().time,
                     totalOpens: lastdoc.docs[0].data().totalOpens+1,
                     totalDesktop: lastdoc.docs[0].data().totalDesktop+isDesktop,
-                    totalMobile: lastdoc.docs[0].data().isMobile+isMobile,
-                    totalTablet: lastdoc.docs[0].data().isTablet+isTablet,
+                    totalMobile: lastdoc.docs[0].data().totalMobile+isMobile,
+                    totalTablet: lastdoc.docs[0].data().totalTablet+isTablet,
                 });
                 //const washingtonRef =await  db.collection(collection).doc(doc).collection('timeseries').doc(timedata).get();
                 // db.collection(collection).doc(doc).collection('timeseries').doc(currentIndex).set({
