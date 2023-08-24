@@ -15,13 +15,13 @@ var currentIndex = Date().toString();
 
 const DeleteData = async (collection, doc,) => {
     try {
-        console.log("deletion started")
+        //console.log("deletion started")
 
         await db.collection(collection).doc(doc).collection('timeseries').get().then(async (res) => {res.forEach(element => {
             element.ref.delete();
           });
         });
-        console.log("Document successfully deleted!");
+        //console.log("Document successfully deleted!");
         db.collection(collection).doc(doc).set({"timeseries": [
         ]});
     } catch (error) {
@@ -31,18 +31,18 @@ const DeleteData = async (collection, doc,) => {
     db.collection(collection).doc(doc).create;
     if(doc!='realtime-update'){
         //currentIndex = 0;
-        console.log("currentindex: "+currentIndex)
+        //console.log("currentindex: "+currentIndex)
     }
 }
 
 const AddData = async (collection, doc, data, timestamp) => {
     try {
-        console.log("function started")
+        //console.log("function started")
                         const timedata = Date().toString();
 
         await db.collection(collection).doc(doc).get().then(async (res) => {
             if (res.exists) {
-                console.log("function processing")
+                //console.log("function processing")
                 //const washingtonRef =await  db.collection(collection).doc(doc).collection('timeseries').doc(timedata).get();
             db.collection(collection).doc(doc).collection('timeseries').doc(timedata).set({
                 time: timedata,
@@ -51,10 +51,10 @@ const AddData = async (collection, doc, data, timestamp) => {
                     totalMobile: 0,
                     totalTablet: 0,
             });
-            console.log('temp')
+            //console.log('temp')
             currentIndex = timedata;
             } else {
-                console.log("No such document!");
+                //console.log("No such document!");
                 db.collection(collection).doc(doc).collection('timeseries').doc(timedata).set({
                     time: timedata,
                     totalOpens: 0,
@@ -63,15 +63,15 @@ const AddData = async (collection, doc, data, timestamp) => {
                     totalTablet: 0,
                 }).then(async () => {
                     currentIndex = timedata;
-                    console.log("Document successfully updated! 1 ");
+                    //console.log("Document successfully updated! 1 ");
                     const ref = db.collection(collection).doc(doc).collection('timeseries');
                     const snapshot = await ref.count().get();
-                    //console.log("currentindex: "+ref.orderBy("createdAt", "desc").limit(1))
+                    ////console.log("currentindex: "+ref.orderBy("createdAt", "desc").limit(1))
                     
                 })
             }
         })
-        console.log("Document successfully updated! 2 ");
+        //console.log("Document successfully updated! 2 ");
     } catch (error) {
         console.error("Error writing document: ", error);
     }
@@ -79,17 +79,17 @@ const AddData = async (collection, doc, data, timestamp) => {
 
 const UpdateData = async (collection, doc, isDesktop, isMobile, isTablet) => {
     try {
-        console.log("function started")
+        //console.log("function started")
                         const timedata = Date().toString();
         await db.collection(collection).doc(doc).collection('timeseries').get().then(async (res) => {
             if (!res.empty) {
-                console.log("function processing")
+                //console.log("function processing")
                 const lastdoc = await db.collection(collection).doc(doc).collection('timeseries').orderBy("time", "desc").limit(0).get();
-                console.log("Document data:", lastdoc.docs[0].data().time);
-                console.log("Document data: ", lastdoc.docs[0].data().totalOpens);
-                console.log("Document data: ", lastdoc.docs[0].data().totalDesktop);
-                console.log("Document data: ", lastdoc.docs[0].data().totalMobile);
-                console.log("Document data: ", lastdoc.docs[0].data().totalTablet);
+                //console.log("Document data:", lastdoc.docs[0].data().time);
+                //console.log("Document data: ", lastdoc.docs[0].data().totalOpens);
+                //console.log("Document data: ", lastdoc.docs[0].data().totalDesktop);
+                //console.log("Document data: ", lastdoc.docs[0].data().totalMobile);
+                //console.log("Document data: ", lastdoc.docs[0].data().totalTablet);
                 db.collection(collection).doc(doc).collection('timeseries').doc(lastdoc.docs[0].data().time).set({
                     time: lastdoc.docs[0].data().time,
                     totalOpens: lastdoc.docs[0].data().totalOpens+1,
@@ -113,7 +113,7 @@ const UpdateData = async (collection, doc, isDesktop, isMobile, isTablet) => {
 
             }
         })
-        //console.log("Document successfully updated!");
+        ////console.log("Document successfully updated!");
     } catch (error) {
         console.error("Error writing document: ", error);
     }
@@ -129,11 +129,11 @@ const AggregateData = async (collection, doc, collection2) => {
         var totalTablet = 0;
         await db.collection('metrics').doc('minute-update').collection('timeseries').get().then((res) => {
             if (!res.empty) {
-                console.log("function processing")
+                //console.log("function processing")
                 db.collection(collection).doc(doc).collection('timeseries').get().then(function(querySnapshot) {
                     querySnapshot.forEach(function(doc) {
                         // doc.data() is never undefined for query doc snapshots
-                        console.log(doc.id, " => ", doc.data());
+                        //console.log(doc.id, " => ", doc.data());
                         totalOpens = totalOpens + doc.data().totalOpens;
                         if(doc.data().isDesktop){
                             totalDesktop++;
@@ -145,10 +145,10 @@ const AggregateData = async (collection, doc, collection2) => {
                             totalTablet++;
                         }
                     });
-                    console.log("totalOpens: "+totalOpens)
-                        console.log("totalDesktop: "+totalDesktop)
-                        console.log("totalMobile: "+totalMobile)
-                        console.log("totalTablet: "+totalTablet)
+                    //console.log("totalOpens: "+totalOpens)
+                        //console.log("totalDesktop: "+totalDesktop)
+                        //console.log("totalMobile: "+totalMobile)
+                        //console.log("totalTablet: "+totalTablet)
                     db.collection(collection).doc(collection2).collection('timeseries').doc(Date().toString()).set({
                         time: Date().toString(),
                         totalOpens: totalOpens,
@@ -160,10 +160,10 @@ const AggregateData = async (collection, doc, collection2) => {
                     })
                 });
             } else {
-                console.log("No such document!");
+                //console.log("No such document!");
             }
         }).catch((error) => {
-            console.log("Error getting document:", error);
+            //console.log("Error getting document:", error);
         });
     } catch (error) {
         console.error("Error writing document: ", error);

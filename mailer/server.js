@@ -11,26 +11,27 @@ const {
 
 // minute update
 cron.schedule('* * * * *', () => {
-  console.log('running a task every minute');
+  //console.log('running a task every minute');
   //DeleteData('metrics','realtime-update',)
   // added minute data to firestore database
-  AddData('metrics','minute-update',Date(),({"time" : Date(), "datafield1": "datafield1", "datafield2": "datafield2" }), Date().slice(0, 16).replace('T', ' '));
+  //AddData('metrics','minute-update',Date(),({"time" : Date(), "datafield1": "datafield1", "datafield2": "datafield2" }), Date().slice(0, 16).replace('T', ' '));
 });
 
-console.log("funciton calling")
+//console.log("funciton calling")
 // DeleteData('metrics','minute-update',)
 
 
+
 // cron.schedule('*/5 * * * *', () => {
-//     console.log('running a task every two minutes');
+//     //console.log('running a task every two minutes');
 //     AggregateData('metrics','minute-update','hourly-update')
 //   });
 
 
 // hour update
 cron.schedule('0 * * * *', () => {
-    console.log('running a task every hour');
-    AggregateData('metrics','minute-update','hourly-update')
+    //console.log('running a task every hour');
+    //AggregateData('metrics','minute-update','hourly-update')
     //DeleteData('metrics','minute-update',)
     // added hour data to firestore database
     // delete minute details from firestore database
@@ -38,26 +39,26 @@ cron.schedule('0 * * * *', () => {
 
 // day update
 cron.schedule('0 0 * * *', () => {
-    console.log('running a task every day');
+    //console.log('running a task every day');
     // added day data to firestore database
     // delete hour details from firestore database
 });
 
 // week update
 cron.schedule('0 0 * * 0', () => {
-    console.log('running a task every week');
+    //console.log('running a task every week');
     // added week data to firestore database
     // delete day details from firestore database
 });
 
 // month update
 cron.schedule('0 0 1 * *', () => {
-    console.log('running a task every month');
+    //console.log('running a task every month');
 });
 
 // year update
 cron.schedule('0 0 1 1 *', () => {
-    console.log('running a task every year');
+    //console.log('running a task every year');
     // added year data to firestore database
     // delete month details from firestore database
 });

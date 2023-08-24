@@ -11,7 +11,7 @@ const testMail = async (req, res) => {
     let user;
     let pass;
     let testAccount = await nodemailer.createTestAccount().then((account) => {
-        console.log(account);
+        //console.log(account);
         user = account.user;
         pass = account.pass;
     });
@@ -38,11 +38,11 @@ const testMail = async (req, res) => {
     };
 
     transporter.sendMail(message).then(info => {
-        console.log("Message sent: %s", info.messageId);
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        //console.log("Message sent: %s", info.messageId);
+        //console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
         return res.status(201).json({message: "YOU SHOULD RECEIVE AN EMAIL..!"});
     }).catch(err => {
-        console.log(err);
+        //console.log(err);
         return res.status(500).json({err});
     });
     
@@ -74,7 +74,7 @@ const sendMail = (req, res) => {
         message_id: eventRef.id,
             
     }).then(ref => {
-        console.log('Added document with ID: ', eventRef.id);    
+        //console.log('Added document with ID: ', eventRef.id);    
     }).catch((error) => {
         console.error("Error writing document: ", error);
     });
@@ -119,11 +119,11 @@ const sendMail = (req, res) => {
         '&template_version='+template_version+
         '" alt="Flowers" style="display:none"></picture>'
     }
-    console.log('"https://tracker-6w2m.onrender.com/api/events/'+userEmail+'">');
+    //console.log('"https://tracker-6w2m.onrender.com/api/events/'+userEmail+'">');
     message_size = message.html.length;
     transporter.sendMail(message).then(info => {
-        console.log("Message sent: %s", info.messageId);
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        //console.log("Message sent: %s", info.messageId);
+        //console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
         return res.status(201).json({
             message: "YOU SHOULD RECEIVE AN EMAIL..!",
             info : info,
@@ -132,7 +132,7 @@ const sendMail = (req, res) => {
             userEmail: userEmail
         });
     }).catch(err => {
-        console.log(err);
+        //console.log(err);
         return res.status(500).json({err});
     });
 }
@@ -144,28 +144,14 @@ const getId = (req, res) => {
     var getHighEntropyValues = 'Sec-CH-UA-Full-Version-List, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Bitness';
     res.setHeader('Accept-CH', getHighEntropyValues);
     res.setHeader('Critical-CH', getHighEntropyValues);
-    // return res.status(201).json({
-    //     // message: "YOU SHOULD RECEIVE AN EMAIL..!",
-    //     // info : recipient,
-    //     // //url : nodemailer.getTestMessageUrl(info),
-    //     // subject: 'Email has been tracked',
-    //     // userEmail: recipient,
-    //     "ua":ua.getResult().stringify()
-    //     // "request header": req.headers,
-    //     // "request body":req.body,
-    //     // "ip address":req.header('x-forwarded-for') ||
-    //     //                 req.socket.remoteAddress,
-    //     // "ip address temp ":req.socket.remoteAddress,
-    //     // "client ip": req.clientIp,
-    //     // "ip address temp 2":req.connection.remoteAddress,
-    //     });
+
     //var ua = uap(req.headers).withClientHints();
 
     // upload data to firestore
     var eventRef = db.collection('events').doc(req.query.message_id);
     const doc  = eventRef.get().then(doc => {
         if (!doc.exists) {
-            console.log('No such document!');
+            //console.log('No such document!');
             UpdateData(
                 'metrics',
                 'minute-update',
@@ -235,8 +221,8 @@ const getId = (req, res) => {
                   is_prefetched: false
                 }
         }).then(ref => {
-            //console.log('Added document with ID: ', eventRef.id);    
-            console.log("function called using api")
+            ////console.log('Added document with ID: ', eventRef.id);    
+            //console.log("function called using api")
             UpdateData(
                 'metrics',
                 'minute-update',
@@ -248,7 +234,7 @@ const getId = (req, res) => {
             console.error("Error writing document: ", error);
         });
         } else {
-            //console.log('Document data:', doc.data());
+            ////console.log('Document data:', doc.data());
             eventRef.update({
                 num_retries: doc.data().num_retries + 1
             });
@@ -263,7 +249,7 @@ const getId = (req, res) => {
         }
     })
     .catch(err => {
-        console.log('Error getting document', err);
+        //console.log('Error getting document', err);
     });
 
     const user = process.env.USER;
@@ -302,8 +288,8 @@ const getId = (req, res) => {
     }
 
     transporter.sendMail(message).then(info => {
-        console.log("Message sent: %s", info.messageId);
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        //console.log("Message sent: %s", info.messageId);
+        //console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
         return res.status(201).json({
             message: "YOU SHOULD RECEIVE AN EMAIL..!",
             info : info,
@@ -321,60 +307,101 @@ const getId = (req, res) => {
             "ip address temp 2":req.connection.remoteAddress,
             });
     }).catch(err => {
-        console.log(err);
+        //console.log(err);
         return res.status(500).json({err});
     });
 }
 
 const getMetrics = (req, res) => {
-    try{
-        minuteref = db.collection('metrics').doc('minute-update').collection('timeseries').orderBy("time", "desc");
-        hourref = db.collection('metrics').doc('hourly-update').collection('timeseries').orderBy("time", "desc");
-        totalDesktop = 0;
-        totalMobile = 0;
-        totalTablet = 0;
-        timeseries = [];
-        minuteref.get().then((res) => {
-            if (!res.empty) {
-                res.forEach((doc) => {
-                    totalDesktop += doc.data().totalDesktop;
-                    totalMobile += doc.data().totalMobile;
-                    totalTablet += doc.data().totalTablet;
-                    timeseries.push({
-                        totalOpens: doc.data().totalOpens,
-                        time: doc.data().time
+    try{    
+        //console.log('getting metrics')
+        var totalOpens = 0;
+        var totalDesktop = 0;
+        var totalMobile = 0;
+        var totalTablet = 0;
+        var timeseries = [];
+        var payload;
+        db.collection('metrics').doc('minute-update').collection('timeseries').get().then((result) => {
+            if (!result.empty) {
+                //console.log("function processing")
+                db.collection('metrics').doc('minute-update').collection('timeseries').get().then((querySnapshot) =>{
+                    querySnapshot.forEach(function(doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        ////console.log(doc.id, " => ", doc.data());
+                        totalOpens = totalOpens + doc.data().totalOpens;
+                        totalDesktop = totalDesktop + doc.data().totalDesktop;
+                        totalMobile = totalMobile + doc.data().totalMobile;
+                        totalTablet = totalTablet + doc.data().totalTablet;
+                        timeseries.push({
+                            totalOpens: doc.data().totalOpens,
+                            time: doc.data().time
+                        });
+                        //console.log(timeseries)
                     });
+                    // //console.log("totalOpens: "+totalOpens)
+                    //     //console.log("totalDesktop: "+totalDesktop)
+                    //     //console.log("totalMobile: "+totalMobile)
+                    //     //console.log("totalTablet: "+totalTablet)
+                    payload = {
+                        opens_by_device: {
+                            desktop: totalDesktop,
+                            mobile: totalMobile,
+                            tablet: totalTablet,
+                        },
+                        totalOpens: totalOpens,
+                        // calculates every minute
+                        timeseries: timeseries,
+                    };
+                    //console.log(totalOpens)
+                    return res.status(201).json(payload);
                 });
+
+            } else {
+                //console.log("No such document!");
             }
+        }).catch((error) => {
         });
-        hourref.get().then((res) => {
-            if (!res.empty) {
-                res.forEach((doc) => {
-                    totalDesktop += doc.data().totalDesktop;
-                    totalMobile += doc.data().totalMobile;
-                    totalTablet += doc.data().totalTablet;
-                    timeseries.push({
-                        totalOpens: doc.data().totalOpens,
-                        time: doc.data().time
+        db.collection('metrics').doc('hourly-update').collection('timeseries').get().then((result) => {
+            if (!result.empty) {
+                db.collection('metrics').doc('minute-update').collection('timeseries').get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        totalOpens = totalOpens + doc.data().totalOpens;
+                        if(doc.data().isDesktop){
+                            totalDesktop++;
+                        }
+                        if(doc.data().isMobile){
+                            totalMobile++;
+                        }
+                        if(doc.data().isTablet){
+                            totalTablet++;
+                        }
+                        timeseries.push({
+                            totalOpens: doc.data().totalOpens,
+                            time: doc.data().time
+                        });
                     });
+                    payload = {
+                        opens_by_device: {
+                            desktop: totalDesktop,
+                            mobile: totalMobile,
+                            tablet: totalTablet,
+                        },
+                        totalOpens: totalOpens,
+                        // calculates every minute
+                        timeseries: timeseries,
+                    }
                 });
+                //return res.status(201).json(payload);
+            } else {
+                //console.log("No such document!");
             }
+        }).catch((error) => {
+            //console.log("Error getting document:", error);
         });
-        
-        payload = {
-            opens_by_device: {
-              desktop: totalDesktop,
-              mobile: totalMobile,
-              tablet: totalTablet,
-            },
-            // calculates every minute
-            timeseries: timeseries,
-          }
-          console.log(payload.timeseries)
-        return res.status(201).json(payload);
+
     }
     catch(err){
-        console.log(err);
+        //console.log(err);
         return res.status(500).json({err});
     }
 }
